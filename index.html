@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<title>Football Intelligence AI</title>
+
+<style>
+:root {
+  --bg:#071426;
+  --panel:#10223a;
+  --panel2:#152b46;
+  --text:#f4f7fb;
+  --muted:#9aacc2;
+  --green:#22d69b;
+  --blue:#4da3ff;
+  --border:#243b56;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+header{
+  padding:22px 16px;
+  background:#0c1c31;
+  border-bottom:1px solid var(--border);
+}
+.brand{color:var(--green);font-size:13px;font-weight:bold}
+h1{font-size:25px;margin:9px 0}
+.subtitle{color:var(--muted);font-size:14px;line-height:1.6}
+main{max-width:1050px;margin:auto;padding:18px}
+.section-title{font-size:19px;margin:24px 0 12px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:12px;
+}
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:17px;
+  border-radius:12px;
+}
+.metric{font-size:23px;color:var(--green);font-weight:bold}
+.metric-label{font-size:12px;color:var(--muted);margin-top:6px}
+label{display:block;font-size:13px;margin:14px 0 7px;color:#d6e1ef}
+input,select{
+  width:100%;
+  padding:13px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#09182b;
+  color:white;
+  font-size:15px;
+}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:16px;
+  border:0;
+  border-radius:8px;
+  background:var(--green);
+  color:#062018;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button.secondary{
+  background:var(--panel2);
+  color:white;
+  border:1px solid var(--border);
+}
+.feature{font-size:14px;line-height:1.7;color:#d0dbea}
+.result{display:none;margin-top:20px}
+.result h3{color:var(--green)}
+.notice{
+  padding:13px;
+  border-left:3px solid var(--blue);
+  background:#10243b;
+  border-radius:5px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+footer{
+  text-align:center;
+  padding:30px 15px;
+  color:var(--muted);
+  font-size:12px;
+  border-top:1px solid var(--border);
+  margin-top:35px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">GLOBAL FOOTBALL RESEARCH PLATFORM</div>
+  <h1>⚽ Football Intelligence AI</h1>
+  <div class="subtitle">
+    Research. Statistics. Analysis. Intelligence.
+    Helping football fans worldwide make better-informed decisions.
+  </div>
+</header>
+
+<main>
+
+  <h2 class="section-title">Our Intelligence Mission</h2>
+  <div class="card">
+    <p class="feature">
+      Football Intelligence AI is designed to study football matches
+      using statistics, historical performance, team form, player
+      information and analytical models.
+    </p>
+    <p class="feature">
+      Our goal is to provide transparent research, explain predictions
+      and help users understand football matches more intelligently.
+    </p>
+  </div>
+
+  <h2 class="section-title">Our Research Capabilities</h2>
+
+  <div class="grid">
+    <div class="card">
+      <div class="metric">01</div>
+      <div class="metric-label">Match Analysis</div>
+    </div>
+    <div class="card">
+      <div class="metric">02</div>
+      <div class="metric-label">Team Performance</div>
+    </div>
+    <div class="card">
+      <div class="metric">03</div>
+      <div class="metric-label">Goal Predictions</div>
+    </div>
+    <div class="card">
+      <div class="metric">04</div>
+      <div class="metric-label">Corner Analysis</div>
+    </div>
+    <div class="card">
+      <div class="metric">05</div>
+      <div class="metric-label">Player Research</div>
+    </div>
+    <div class="card">
+      <div class="metric">06</div>
+      <div class="metric-label">Risk Assessment</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Football Match Research</h2>
+
+  <div class="card">
+    <label for="competition">League or Competition</label>
+    <input id="competition" placeholder="Example: Premier League">
+
+    <label for="home">Home Team</label>
+    <input id="home" placeholder="Enter home team">
+
+    <label for="away">Away Team</label>
+    <input id="away" placeholder="Enter away team">
+
+    <label for="date">Match Date</label>
+    <input id="date" type="date">
+
+    <label for="market">Analysis Type</label>
+    <select id="market">
+      <option>Full Match Analysis</option>
+      <option>Match Result (1X2)</option>
+      <option>Over / Under Goals</option>
+      <option>Both Teams To Score</option>
+      <option>Corner Kicks</option>
+      <option>First Half Analysis</option>
+      <option>Head-to-Head Analysis</option>
+    </select>
+
+    <button onclick="analyzeMatch()">Prepare Match Research</button>
+
+    <div class="result card" id="result">
+      <h3>Research Request Prepared</h3>
+      <p id="matchInfo" class="feature"></p>
+      <div class="notice">
+        This is a research request, not a prediction.
+        Live statistics and verified football data must be connected
+        before the platform can produce evidence-based predictions.
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Our Intelligence Standards</h2>
+
+  <div class="card">
+    <p class="feature">✓ Historical match statistics</p>
+    <p class="feature">✓ Home and away performance</p>
+    <p class="feature">✓ Recent team form</p>
+    <p class="feature">✓ Player availability and injuries</p>
+    <p class="feature">✓ Head-to-head research</p>
+    <p class="feature">✓ Goals and corner statistics</p>
+    <p class="feature">✓ Prediction confidence and uncertainty</p>
+    <p class="feature">✓ Transparent explanations</p>
+  </div>
+
+  <h2 class="section-title">Our Promise to Football Fans</h2>
+
+  <div class="notice">
+    We do not invent statistics, manipulate results or promise
+    guaranteed betting wins. Every future prediction must be based
+    on available evidence, tested analytical methods and clearly
+    explained uncertainty.
+  </div>
+
+</main>
+
+<footer>
+  FOOTBALL INTELLIGENCE AI<br><br>
+  Developed by Garba Numbeya<br>
+  A Worldwide Football Research & Intelligence Project<br><br>
+  © 2026 Football Intelligence AI
+</footer>
+
+<script>
+function analyzeMatch(){
+  const competition=document.getElementById("competition").value.trim();
+  const home=document.getElementById("home").value.trim();
+  const away=document.getElementById("away").value.trim();
+  const date=document.getElementById("date").value;
+  const market=document.getElementById("market").value;
+
+  if(!home || !away){
+    alert("Please enter both football teams.");
+    return;
+  }
+
+  if(home.toLowerCase()===away.toLowerCase()){
+    alert("Please enter two different teams.");
+    return;
+  }
+
+  document.getElementById("matchInfo").innerHTML=
+    "<strong>Competition:</strong> "+escapeHTML(competition || "Not specified")+
+    "<br><strong>Home:</strong> "+escapeHTML(home)+
+    "<br><strong>Away:</strong> "+escapeHTML(away)+
+    "<br><strong>Date:</strong> "+escapeHTML(date || "Not specified")+
+    "<br><strong>Research requested:</strong> "+escapeHTML(market);
+
+  document.getElementById("result").style.display="block";
+}
+
+function escapeHTML(value){
+  return value.replace(/[&<>"']/g,function(char){
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[char];
+  });
+}
+</script>
+
+</body>
+  </html>
