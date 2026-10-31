@@ -4,265 +4,277 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#071426">
-<title>Football Intelligence AI</title>
-
+<meta name="theme-color" content="#071525">
+<title>GN-AI | Football Intelligence</title>
 <style>
 :root {
-  --bg:#071426;
-  --panel:#10223a;
-  --panel2:#152b46;
-  --text:#f4f7fb;
-  --muted:#9aacc2;
-  --green:#22d69b;
-  --blue:#4da3ff;
-  --border:#243b56;
+  --bg:#071525;
+  --panel:#10243a;
+  --green:#20d58a;
+  --text:#f4f8fc;
+  --muted:#a9bacb;
 }
-*{box-sizing:border-box}
-body{
+* { box-sizing:border-box; }
+body {
   margin:0;
+  font-family:Arial,sans-serif;
   background:var(--bg);
   color:var(--text);
-  font-family:Arial,sans-serif;
+  line-height:1.6;
 }
-header{
-  padding:22px 16px;
-  background:#0c1c31;
-  border-bottom:1px solid var(--border);
+header {
+  padding:20px;
+  border-bottom:1px solid #294057;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
 }
-.brand{color:var(--green);font-size:13px;font-weight:bold}
-h1{font-size:25px;margin:9px 0}
-.subtitle{color:var(--muted);font-size:14px;line-height:1.6}
-main{max-width:1050px;margin:auto;padding:18px}
-.section-title{font-size:19px;margin:24px 0 12px}
-.grid{
+.logo { font-size:24px; font-weight:bold; }
+.logo span { color:var(--green); }
+nav a {
+  color:var(--text);
+  text-decoration:none;
+  margin:0 8px;
+  font-size:14px;
+}
+.hero {
+  text-align:center;
+  padding:65px 20px 45px;
+  background:linear-gradient(145deg,#102b42,#071525);
+}
+.hero h1 { font-size:clamp(32px,7vw,52px); line-height:1.15; }
+.hero h1 span { color:var(--green); }
+.hero p { color:var(--muted); max-width:650px; margin:18px auto; }
+.tag {
+  display:inline-block;
+  color:var(--green);
+  border:1px solid #247d5c;
+  border-radius:30px;
+  padding:6px 14px;
+  font-size:12px;
+}
+.container { max-width:1050px; margin:auto; padding:30px 18px; }
+h2 { font-size:27px; }
+.muted { color:var(--muted); }
+.grid {
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
 }
-.card{
+.card {
   background:var(--panel);
-  border:1px solid var(--border);
-  padding:17px;
-  border-radius:12px;
+  border:1px solid #294057;
+  border-radius:14px;
+  padding:20px;
 }
-.metric{font-size:23px;color:var(--green);font-weight:bold}
-.metric-label{font-size:12px;color:var(--muted);margin-top:6px}
-label{display:block;font-size:13px;margin:14px 0 7px;color:#d6e1ef}
-input,select{
+.card h3 { margin-top:0; color:var(--green); }
+form { display:grid; gap:14px; }
+label { font-size:14px; color:var(--muted); }
+input,select {
   width:100%;
   padding:13px;
   border-radius:8px;
-  border:1px solid var(--border);
-  background:#09182b;
+  border:1px solid #40566c;
+  background:#081827;
   color:white;
-  font-size:15px;
+  font-size:16px;
 }
-button{
-  width:100%;
-  padding:14px;
-  margin-top:16px;
+button {
   border:0;
   border-radius:8px;
   background:var(--green);
-  color:#062018;
-  font-size:15px;
+  color:#052318;
+  font-size:16px;
   font-weight:bold;
+  padding:14px;
   cursor:pointer;
 }
-button.secondary{
-  background:var(--panel2);
-  color:white;
-  border:1px solid var(--border);
+button:hover { background:#49e6a6; }
+#result {
+  display:none;
+  margin-top:20px;
+  padding:18px;
+  border:1px solid var(--green);
+  border-radius:10px;
+  background:#0b3029;
+  overflow-wrap:anywhere;
 }
-.feature{font-size:14px;line-height:1.7;color:#d0dbea}
-.result{display:none;margin-top:20px}
-.result h3{color:var(--green)}
-.notice{
-  padding:13px;
-  border-left:3px solid var(--blue);
-  background:#10243b;
-  border-radius:5px;
+.notice {
+  border-left:4px solid var(--green);
+  padding:12px 16px;
+  background:#10243a;
+  color:var(--muted);
+}
+footer {
+  text-align:center;
+  padding:28px 15px;
+  border-top:1px solid #294057;
   color:var(--muted);
   font-size:13px;
-  line-height:1.6;
-}
-footer{
-  text-align:center;
-  padding:30px 15px;
-  color:var(--muted);
-  font-size:12px;
-  border-top:1px solid var(--border);
-  margin-top:35px;
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="brand">GLOBAL FOOTBALL RESEARCH PLATFORM</div>
-  <h1>⚽ Football Intelligence AI</h1>
-  <div class="subtitle">
-    Research. Statistics. Analysis. Intelligence.
-    Helping football fans worldwide make better-informed decisions.
-  </div>
+  <div class="logo">GN<span>-AI</span></div>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#features">Features</a>
+    <a href="#research">Research</a>
+  </nav>
 </header>
 
-<main>
+<section class="hero">
+  <span class="tag">GLOBAL FOOTBALL INTELLIGENCE</span>
+  <h1>Understand Football.<br><span>Think Smarter.</span></h1>
+  <p>
+    A football research platform designed to help people
+    explore matches, teams, players and performance through
+    intelligent analysis and reliable information.
+  </p>
+  <a href="#research"><button>Start Match Research</button></a>
+</section>
 
-  <h2 class="section-title">Our Intelligence Mission</h2>
-  <div class="card">
-    <p class="feature">
-      Football Intelligence AI is designed to study football matches
-      using statistics, historical performance, team form, player
-      information and analytical models.
-    </p>
-    <p class="feature">
-      Our goal is to provide transparent research, explain predictions
-      and help users understand football matches more intelligently.
-    </p>
-  </div>
+<section class="container" id="about">
+  <h2>Our Mission</h2>
+  <p class="muted">
+    GN-AI aims to make football research more accessible worldwide.
+    Our goal is to help fans, researchers and analysts understand
+    the game using useful information, transparent methods and
+    responsible analysis.
+  </p>
+</section>
 
-  <h2 class="section-title">Our Research Capabilities</h2>
-
+<section class="container" id="features">
+  <h2>Research Capabilities</h2>
   <div class="grid">
     <div class="card">
-      <div class="metric">01</div>
-      <div class="metric-label">Match Analysis</div>
+      <h3>Match Analysis</h3>
+      <p class="muted">Explore match context, team form and important factors.</p>
     </div>
     <div class="card">
-      <div class="metric">02</div>
-      <div class="metric-label">Team Performance</div>
+      <h3>Team Performance</h3>
+      <p class="muted">Study team strengths, weaknesses and performance trends.</p>
     </div>
     <div class="card">
-      <div class="metric">03</div>
-      <div class="metric-label">Goal Predictions</div>
+      <h3>Goal Research</h3>
+      <p class="muted">Explore scoring patterns and goal-related statistics.</p>
     </div>
     <div class="card">
-      <div class="metric">04</div>
-      <div class="metric-label">Corner Analysis</div>
+      <h3>Corner Analysis</h3>
+      <p class="muted">Research corner-kick trends and team patterns.</p>
     </div>
     <div class="card">
-      <div class="metric">05</div>
-      <div class="metric-label">Player Research</div>
+      <h3>Player Research</h3>
+      <p class="muted">Explore player performance and contributions.</p>
     </div>
     <div class="card">
-      <div class="metric">06</div>
-      <div class="metric-label">Risk Assessment</div>
+      <h3>Risk Assessment</h3>
+      <p class="muted">Understand uncertainty and factors that can affect a match.</p>
     </div>
   </div>
+</section>
 
-  <h2 class="section-title">Football Match Research</h2>
+<section class="container" id="research">
+  <h2>Football Match Research</h2>
+  <p class="muted">Enter a match to prepare a research request.</p>
 
   <div class="card">
-    <label for="competition">League or Competition</label>
-    <input id="competition" placeholder="Example: Premier League">
-
-    <label for="home">Home Team</label>
-    <input id="home" placeholder="Enter home team">
-
-    <label for="away">Away Team</label>
-    <input id="away" placeholder="Enter away team">
-
-    <label for="date">Match Date</label>
-    <input id="date" type="date">
-
-    <label for="market">Analysis Type</label>
-    <select id="market">
-      <option>Full Match Analysis</option>
-      <option>Match Result (1X2)</option>
-      <option>Over / Under Goals</option>
-      <option>Both Teams To Score</option>
-      <option>Corner Kicks</option>
-      <option>First Half Analysis</option>
-      <option>Head-to-Head Analysis</option>
-    </select>
-
-    <button onclick="analyzeMatch()">Prepare Match Research</button>
-
-    <div class="result card" id="result">
-      <h3>Research Request Prepared</h3>
-      <p id="matchInfo" class="feature"></p>
-      <div class="notice">
-        This is a research request, not a prediction.
-        Live statistics and verified football data must be connected
-        before the platform can produce evidence-based predictions.
+    <form id="matchForm">
+      <div>
+        <label for="competition">Competition or League</label>
+        <input id="competition" placeholder="Example: Premier League" required>
       </div>
-    </div>
+      <div>
+        <label for="home">Home Team</label>
+        <input id="home" placeholder="Enter home team" required>
+      </div>
+      <div>
+        <label for="away">Away Team</label>
+        <input id="away" placeholder="Enter away team" required>
+      </div>
+      <div>
+        <label for="date">Match Date</label>
+        <input id="date" type="date">
+      </div>
+      <div>
+        <label for="type">Research Type</label>
+        <select id="type">
+          <option>Complete Match Research</option>
+          <option>Team Performance</option>
+          <option>Goal Statistics</option>
+          <option>Corner Statistics</option>
+          <option>Player Research</option>
+          <option>Risk Assessment</option>
+        </select>
+      </div>
+      <button type="submit">Prepare Research Request</button>
+    </form>
+
+    <div id="result" aria-live="polite"></div>
   </div>
+</section>
 
-  <h2 class="section-title">Our Intelligence Standards</h2>
-
-  <div class="card">
-    <p class="feature">✓ Historical match statistics</p>
-    <p class="feature">✓ Home and away performance</p>
-    <p class="feature">✓ Recent team form</p>
-    <p class="feature">✓ Player availability and injuries</p>
-    <p class="feature">✓ Head-to-head research</p>
-    <p class="feature">✓ Goals and corner statistics</p>
-    <p class="feature">✓ Prediction confidence and uncertainty</p>
-    <p class="feature">✓ Transparent explanations</p>
-  </div>
-
-  <h2 class="section-title">Our Promise to Football Fans</h2>
-
+<section class="container">
+  <h2>Our Intelligence Standards</h2>
   <div class="notice">
-    We do not invent statistics, manipulate results or promise
-    guaranteed betting wins. Every future prediction must be based
-    on available evidence, tested analytical methods and clearly
-    explained uncertainty.
+    GN-AI does not invent statistics, claim guaranteed results
+    or promise betting wins. Reliable live data and AI analysis
+    must be connected before real match intelligence can be provided.
   </div>
-
-</main>
+</section>
 
 <footer>
-  FOOTBALL INTELLIGENCE AI<br><br>
-  Developed by Garba Numbeya<br>
-  A Worldwide Football Research & Intelligence Project<br><br>
-  © 2026 Football Intelligence AI
+  <p><strong>GN-AI Football Intelligence</strong></p>
+  <p>Developed by Garba Numbeya</p>
+  <p>Building intelligent solutions for the world.</p>
+  <p>© 2026 GN-AI. All rights reserved.</p>
 </footer>
 
 <script>
-function analyzeMatch(){
-  const competition=document.getElementById("competition").value.trim();
-  const home=document.getElementById("home").value.trim();
-  const away=document.getElementById("away").value.trim();
-  const date=document.getElementById("date").value;
-  const market=document.getElementById("market").value;
+document.getElementById("matchForm").addEventListener("submit", function(event) {
+  event.preventDefault();
 
-  if(!home || !away){
-    alert("Please enter both football teams.");
+  const competition = document.getElementById("competition").value.trim();
+  const home = document.getElementById("home").value.trim();
+  const away = document.getElementById("away").value.trim();
+  const date = document.getElementById("date").value || "Not specified";
+  const type = document.getElementById("type").value;
+  const result = document.getElementById("result");
+
+  if (!home || !away || home.toLowerCase() === away.toLowerCase()) {
+    result.style.display = "block";
+    result.textContent = "Please enter two different team names.";
     return;
   }
 
-  if(home.toLowerCase()===away.toLowerCase()){
-    alert("Please enter two different teams.");
-    return;
-  }
+  result.style.display = "block";
+  result.innerHTML = `
+    <h3>Research Request Prepared</h3>
+    <p><strong>Competition:</strong> ${escapeHTML(competition)}</p>
+    <p><strong>Home Team:</strong> ${escapeHTML(home)}</p>
+    <p><strong>Away Team:</strong> ${escapeHTML(away)}</p>
+    <p><strong>Date:</strong> ${escapeHTML(date)}</p>
+    <p><strong>Research:</strong> ${escapeHTML(type)}</p>
+    <p>This request is prepared. Live statistics and AI analysis
+    are not connected yet.</p>
+  `;
+});
 
-  document.getElementById("matchInfo").innerHTML=
-    "<strong>Competition:</strong> "+escapeHTML(competition || "Not specified")+
-    "<br><strong>Home:</strong> "+escapeHTML(home)+
-    "<br><strong>Away:</strong> "+escapeHTML(away)+
-    "<br><strong>Date:</strong> "+escapeHTML(date || "Not specified")+
-    "<br><strong>Research requested:</strong> "+escapeHTML(market);
-
-  document.getElementById("result").style.display="block";
-}
-
-function escapeHTML(value){
-  return value.replace(/[&<>"']/g,function(char){
+function escapeHTML(value) {
+  return value.replace(/[&<>"']/g, function(char) {
     return {
       "&":"&amp;",
       "<":"&lt;",
       ">":"&gt;",
       '"':"&quot;",
-      "'":"&#39;"
+      "'":"&#039;"
     }[char];
   });
 }
 </script>
-
 </body>
-  </html>
+</html>
+
