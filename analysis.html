@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Football Intelligence AI</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #101827;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #39d98a;
+      text-align: center;
+    }
+
+    .panel {
+      background: #1d293b;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      border-radius: 7px;
+      border: none;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    button {
+      background: #20c77a;
+      color: #071b12;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .result {
+      line-height: 1.8;
+      margin-top: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .notice {
+      color: #ffd166;
+      font-size: 13px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>Football Intelligence AI</h1>
+
+  <p style="text-align:center">
+    Worldwide Football Research & Analysis
+  </p>
+
+  <div class="panel">
+    <h2>Match Analysis</h2>
+
+    <label>Home Team</label>
+    <input id="home" placeholder="Enter home team">
+
+    <label>Away Team</label>
+    <input id="away" placeholder="Enter away team">
+
+    <label>Home Team Last 5 Results</label>
+    <input id="homeForm" placeholder="W,W,D,L,W">
+
+    <label>Away Team Last 5 Results</label>
+    <input id="awayForm" placeholder="L,D,W,L,D">
+
+    <h3>Expected Goals Research</h3>
+
+    <p class="notice">
+      Enter estimated goals for each team using your available
+      statistics. These are research inputs, not live data.
+    </p>
+
+    <label>Home Team Expected Goals (0 to 6)</label>
+    <input id="homeGoals" type="number"
+      min="0" max="6" step="0.1" placeholder="Example: 1.6">
+
+    <label>Away Team Expected Goals (0 to 6)</label>
+    <input id="awayGoals" type="number"
+      min="0" max="6" step="0.1" placeholder="Example: 1.1">
+
+    <button onclick="analyzeMatch()">
+      Analyze Match
+    </button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <p class="notice">
+    Important: This is an early research prototype.
+    Predictions are estimates, not guarantees.
+    Always verify team statistics before making decisions.
+  </p>
+
+</div>
+
+<script src="prediction.js"></script>
+
+<script>
+function analyzeMatch() {
+  const home = document.getElementById("home").value.trim();
+  const away = document.getElementById("away").value.trim();
+
+  const homeForm = document.getElementById("homeForm").value.toUpperCase();
+  const awayForm = document.getElementById("awayForm").value.toUpperCase();
+
+  const homeGoals = Number(document.getElementById("homeGoals").value);
+  const awayGoals = Number(document.getElementById("awayGoals").value);
+
+  const result = document.getElementById("result");
+
+  if (!home || !away) {
+    result.textContent = "Please enter both team names.";
+    return;
+  }
+
+  function score(form) {
+    const results = form.split(",").map(x => x.trim());
+
+    if (
+      results.length !== 5 ||
+      results.some(x => !["W", "D", "L"].includes(x))
+    ) {
+      return null;
+    }
+
+    return results.reduce((total, item) =>
+      total + (item === "W" ? 3 : item === "D" ? 1 : 0), 0);
+  }
+
+  const hs = score(homeForm);
+  const as = score(awayForm);
+
+  if (hs === null || as === null) {
+    result.textContent =
+      "Enter exactly five valid results for each team using W, D or L.";
+    return;
+  }
+
+  if (
+    document.getElementById("homeGoals").value === "" ||
+    document.getElementById("awayGoals").value === "" ||
+    !Number.isFinite(homeGoals) ||
+    !Number.isFinite(awayGoals) ||
+    homeGoals < 0 || homeGoals > 6 ||
+    awayGoals < 0 || awayGoals > 6
+  ) {
+    result.textContent =
+      "Enter expected goals between 0 and 6 for both teams.";
+    return;
+  }
+
+  if (typeof predictMatch !== "function") {
+    result.textContent =
+      "Prediction engine not connected. Check prediction.js.";
+    return;
+  }
+
+  const formFinding =
+    hs > as ? home + " has stronger recent form." :
+    as > hs ? away + " has stronger recent form." :
+    "Both teams have equal recent-form points.";
+
+  const prediction = predictMatch(homeGoals, awayGoals);
+
+  result.innerHTML = `
+    <h3>Match Analysis Report</h3>
+
+    <p><b>Home:</b> ${escapeHTML(home)} — ${hs}/15 points</p>
+    <p><b>Away:</b> ${escapeHTML(away)} — ${as}/15 points</p>
+
+    <p><b>Research finding:</b> ${escapeHTML(formFinding)}</p>
+
+    <h3>Match Probability Estimates</h3>
+
+    <p>Home Win: ${prediction.homeWin}%</p>
+    <p>Draw: ${prediction.draw}%</p>
+    <p>Away Win: ${prediction.awayWin}%</p>
+
+    <h3>Goals Analysis</h3>
+
+    <p>Over 2.5 Goals: ${prediction.over25}%</p>
+    <p>Under 2.5 Goals: ${prediction.under25}%</p>
+    <p>Both Teams to Score — Yes: ${prediction.bttsYes}%</p>
+    <p>Both Teams to Score — No: ${prediction.bttsNo}%</p>
+
+    <h3>Leading Outcome</h3>
+    <p>${prediction.leadingOutcome}</p>
+
+    <p><b>Model:</b> ${prediction.model}</p>
+
+    <p class="notice">${prediction.warning}</p>
+  `;
+}
+
+function escapeHTML(value) {
+  return value.replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Football Intelligence AI</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #101827;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #39d98a;
+      text-align: center;
+    }
+
+    .panel {
+      background: #1d293b;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      border-radius: 7px;
+      border: none;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    button {
+      background: #20c77a;
+      color: #071b12;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .result {
+      line-height: 1.8;
+      margin-top: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .notice {
+      color: #ffd166;
+      font-size: 13px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>Football Intelligence AI</h1>
+
+  <p style="text-align:center">
+    Worldwide Football Research & Analysis
+  </p>
+
+  <div class="panel">
+    <h2>Match Analysis</h2>
+
+    <label>Home Team</label>
+    <input id="home" placeholder="Enter home team">
+
+    <label>Away Team</label>
+    <input id="away" placeholder="Enter away team">
+
+    <label>Home Team Last 5 Results</label>
+    <input id="homeForm" placeholder="W,W,D,L,W">
+
+    <label>Away Team Last 5 Results</label>
+    <input id="awayForm" placeholder="L,D,W,L,D">
+
+    <h3>Expected Goals Research</h3>
+
+    <p class="notice">
+      Enter estimated goals for each team using your available
+      statistics. These are research inputs, not live data.
+    </p>
+
+    <label>Home Team Expected Goals (0 to 6)</label>
+    <input id="homeGoals" type="number"
+      min="0" max="6" step="0.1" placeholder="Example: 1.6">
+
+    <label>Away Team Expected Goals (0 to 6)</label>
+    <input id="awayGoals" type="number"
+      min="0" max="6" step="0.1" placeholder="Example: 1.1">
+
+    <button onclick="analyzeMatch()">
+      Analyze Match
+    </button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <p class="notice">
+    Important: This is an early research prototype.
+    Predictions are estimates, not guarantees.
+    Always verify team statistics before making decisions.
+  </p>
+
+</div>
+
+<script src="prediction.js"></script>
+
+<script>
+function analyzeMatch() {
+  const home = document.getElementById("home").value.trim();
+  const away = document.getElementById("away").value.trim();
+
+  const homeForm = document.getElementById("homeForm").value.toUpperCase();
+  const awayForm = document.getElementById("awayForm").value.toUpperCase();
+
+  const homeGoals = Number(document.getElementById("homeGoals").value);
+  const awayGoals = Number(document.getElementById("awayGoals").value);
+
+  const result = document.getElementById("result");
+
+  if (!home || !away) {
+    result.textContent = "Please enter both team names.";
+    return;
+  }
+
+  function score(form) {
+    const results = form.split(",").map(x => x.trim());
+
+    if (
+      results.length !== 5 ||
+      results.some(x => !["W", "D", "L"].includes(x))
+    ) {
+      return null;
+    }
+
+    return results.reduce((total, item) =>
+      total + (item === "W" ? 3 : item === "D" ? 1 : 0), 0);
+  }
+
+  const hs = score(homeForm);
+  const as = score(awayForm);
+
+  if (hs === null || as === null) {
+    result.textContent =
+      "Enter exactly five valid results for each team using W, D or L.";
+    return;
+  }
+
+  if (
+    document.getElementById("homeGoals").value === "" ||
+    document.getElementById("awayGoals").value === "" ||
+    !Number.isFinite(homeGoals) ||
+    !Number.isFinite(awayGoals) ||
+    homeGoals < 0 || homeGoals > 6 ||
+    awayGoals < 0 || awayGoals > 6
+  ) {
+    result.textContent =
+      "Enter expected goals between 0 and 6 for both teams.";
+    return;
+  }
+
+  if (typeof predictMatch !== "function") {
+    result.textContent =
+      "Prediction engine not connected. Check prediction.js.";
+    return;
+  }
+
+  const formFinding =
+    hs > as ? home + " has stronger recent form." :
+    as > hs ? away + " has stronger recent form." :
+    "Both teams have equal recent-form points.";
+
+  const prediction = predictMatch(homeGoals, awayGoals);
+
+  result.innerHTML = `
+    <h3>Match Analysis Report</h3>
+
+    <p><b>Home:</b> ${escapeHTML(home)} — ${hs}/15 points</p>
+    <p><b>Away:</b> ${escapeHTML(away)} — ${as}/15 points</p>
+
+    <p><b>Research finding:</b> ${escapeHTML(formFinding)}</p>
+
+    <h3>Match Probability Estimates</h3>
+
+    <p>Home Win: ${prediction.homeWin}%</p>
+    <p>Draw: ${prediction.draw}%</p>
+    <p>Away Win: ${prediction.awayWin}%</p>
+
+    <h3>Goals Analysis</h3>
+
+    <p>Over 2.5 Goals: ${prediction.over25}%</p>
+    <p>Under 2.5 Goals: ${prediction.under25}%</p>
+    <p>Both Teams to Score — Yes: ${prediction.bttsYes}%</p>
+    <p>Both Teams to Score — No: ${prediction.bttsNo}%</p>
+
+    <h3>Leading Outcome</h3>
+    <p>${prediction.leadingOutcome}</p>
+
+    <p><b>Model:</b> ${prediction.model}</p>
+
+    <p class="notice">${prediction.warning}</p>
+  `;
+}
+
+function escapeHTML(value) {
+  return value.replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[character]);
+}
+</script>
+
+</body>
+</html>
