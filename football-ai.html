@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Intelligence AI</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #071426;
+  color: white;
+  text-align: center;
+  padding: 25px;
+}
+.container {
+  max-width: 500px;
+  margin: auto;
+  background: #10243d;
+  padding: 25px;
+  border-radius: 15px;
+}
+h1 { color: #38d996; }
+input, button {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  box-sizing: border-box;
+}
+button {
+  background: #38d996;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>⚽ Football Intelligence AI</h1>
+<p>Smart football match analysis</p>
+<input id="home" placeholder="Enter home team">
+<input id="away" placeholder="Enter away team">
+<button onclick="predict()">Analyze Match</button>
+<div id="result"></div>
+</div>
+<script>
+function predict() {
+ const home = document.getElementById("home").value;
+ const away = document.getElementById("away").value;
+ if (!home || !away) {
+  document.getElementById("result").innerText =
+  "Please enter both teams.";
+  return;
+ }
+ document.getElementById("result").innerHTML =
+ "<h3>Match Analysis</h3><p>" + home +
+ " vs " + away + "</p><p>Connect live football data to enable predictions.</p>";
+}
+</script>
+</body>
+</html>
