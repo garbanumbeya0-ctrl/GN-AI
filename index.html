@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,274 +6,205 @@
 <meta name="theme-color" content="#071525">
 <title>GN-AI | Football Intelligence</title>
 <style>
-:root {
-  --bg:#071525;
-  --panel:#10243a;
-  --green:#20d58a;
-  --text:#f4f8fc;
-  --muted:#a9bacb;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.6;
-}
-header {
-  padding:20px;
-  border-bottom:1px solid #294057;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-}
-.logo { font-size:24px; font-weight:bold; }
-.logo span { color:var(--green); }
-nav a {
-  color:var(--text);
-  text-decoration:none;
-  margin:0 8px;
-  font-size:14px;
-}
-.hero {
-  text-align:center;
-  padding:65px 20px 45px;
-  background:linear-gradient(145deg,#102b42,#071525);
-}
-.hero h1 { font-size:clamp(32px,7vw,52px); line-height:1.15; }
-.hero h1 span { color:var(--green); }
-.hero p { color:var(--muted); max-width:650px; margin:18px auto; }
-.tag {
-  display:inline-block;
-  color:var(--green);
-  border:1px solid #247d5c;
-  border-radius:30px;
-  padding:6px 14px;
-  font-size:12px;
-}
-.container { max-width:1050px; margin:auto; padding:30px 18px; }
-h2 { font-size:27px; }
-.muted { color:var(--muted); }
-.grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px;
-}
-.card {
-  background:var(--panel);
-  border:1px solid #294057;
-  border-radius:14px;
-  padding:20px;
-}
-.card h3 { margin-top:0; color:var(--green); }
-form { display:grid; gap:14px; }
-label { font-size:14px; color:var(--muted); }
-input,select {
-  width:100%;
-  padding:13px;
-  border-radius:8px;
-  border:1px solid #40566c;
-  background:#081827;
-  color:white;
-  font-size:16px;
-}
-button {
-  border:0;
-  border-radius:8px;
-  background:var(--green);
-  color:#052318;
-  font-size:16px;
-  font-weight:bold;
-  padding:14px;
-  cursor:pointer;
-}
-button:hover { background:#49e6a6; }
-#result {
-  display:none;
-  margin-top:20px;
-  padding:18px;
-  border:1px solid var(--green);
-  border-radius:10px;
-  background:#0b3029;
-  overflow-wrap:anywhere;
-}
-.notice {
-  border-left:4px solid var(--green);
-  padding:12px 16px;
-  background:#10243a;
-  color:var(--muted);
-}
-footer {
-  text-align:center;
-  padding:28px 15px;
-  border-top:1px solid #294057;
-  color:var(--muted);
-  font-size:13px;
-}
+:root{--bg:#071525;--panel:#10243a;--green:#20d58a;--text:#f4f8fc;--muted:#a9bacb;--red:#ff8d8d}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+header{padding:20px;border-bottom:1px solid #294057;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.logo{font-size:24px;font-weight:bold}.logo span{color:var(--green)}
+nav a{color:var(--text);text-decoration:none;margin:0 8px;font-size:14px}
+.hero{text-align:center;padding:65px 20px 45px;background:linear-gradient(145deg,#102b42,#071525)}
+.hero h1{font-size:clamp(32px,7vw,52px);line-height:1.15}.hero h1 span{color:var(--green)}
+.hero p{color:var(--muted);max-width:650px;margin:18px auto}
+.tag{display:inline-block;color:var(--green);border:1px solid #247d5c;border-radius:30px;padding:6px 14px;font-size:12px}
+.container{max-width:1050px;margin:auto;padding:30px 18px}
+h2{font-size:27px}.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:var(--panel);border:1px solid #294057;border-radius:14px;padding:20px}
+.card h3{margin-top:0;color:var(--green)}
+form{display:grid;gap:14px}
+label{font-size:14px;color:var(--muted)}
+input,select{width:100%;padding:13px;border-radius:8px;border:1px solid #40566c;background:#081827;color:white;font-size:16px}
+button{border:0;border-radius:8px;background:var(--green);color:#052318;font-size:16px;font-weight:bold;padding:14px;cursor:pointer}
+button:hover{background:#49e6a6}button:disabled{opacity:.6;cursor:wait}
+#result{display:none;margin-top:20px;padding:18px;border:1px solid var(--green);border-radius:10px;background:#0b3029;overflow-wrap:anywhere}
+#result.error{border-color:var(--red);background:#351d25}
+#result h3{color:var(--green)}#result.error h3{color:var(--red)}
+.notice{border-left:4px solid var(--green);padding:12px 16px;background:#10243a;color:var(--muted)}
+footer{text-align:center;padding:28px 15px;border-top:1px solid #294057;color:var(--muted);font-size:13px}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">GN<span>-AI</span></div>
-  <nav>
-    <a href="#about">About</a>
-    <a href="#features">Features</a>
-    <a href="#research">Research</a>
-  </nav>
+  <nav><a href="#about">About</a><a href="#features">Features</a><a href="#research">Research</a></nav>
 </header>
-
 <section class="hero">
   <span class="tag">GLOBAL FOOTBALL INTELLIGENCE</span>
   <h1>Understand Football.<br><span>Think Smarter.</span></h1>
-  <p>
-    A football research platform designed to help people
-    explore matches, teams, players and performance through
-    intelligent analysis and reliable information.
-  </p>
-  <a href="#research"><button>Start Match Research</button></a>
+  <p>A football research platform to explore matches, teams, players and performance using available football data and AI analysis.</p>
+  <a href="#research"><button type="button">Start Match Research</button></a>
 </section>
-
 <section class="container" id="about">
   <h2>Our Mission</h2>
-  <p class="muted">
-    GN-AI aims to make football research more accessible worldwide.
-    Our goal is to help fans, researchers and analysts understand
-    the game using useful information, transparent methods and
-    responsible analysis.
-  </p>
+  <p class="muted">GN-AI makes football research more accessible worldwide, helping fans, researchers and analysts understand the game through useful information, transparent methods and responsible analysis.</p>
 </section>
-
 <section class="container" id="features">
   <h2>Research Capabilities</h2>
   <div class="grid">
-    <div class="card">
-      <h3>Match Analysis</h3>
-      <p class="muted">Explore match context, team form and important factors.</p>
-    </div>
-    <div class="card">
-      <h3>Team Performance</h3>
-      <p class="muted">Study team strengths, weaknesses and performance trends.</p>
-    </div>
-    <div class="card">
-      <h3>Goal Research</h3>
-      <p class="muted">Explore scoring patterns and goal-related statistics.</p>
-    </div>
-    <div class="card">
-      <h3>Corner Analysis</h3>
-      <p class="muted">Research corner-kick trends and team patterns.</p>
-    </div>
-    <div class="card">
-      <h3>Player Research</h3>
-      <p class="muted">Explore player performance and contributions.</p>
-    </div>
-    <div class="card">
-      <h3>Risk Assessment</h3>
-      <p class="muted">Understand uncertainty and factors that can affect a match.</p>
-    </div>
+    <div class="card"><h3>Match Analysis</h3><p class="muted">Review match information and available performance data.</p></div>
+    <div class="card"><h3>Team Performance</h3><p class="muted">Explore team information and performance context.</p></div>
+    <div class="card"><h3>Goal Research</h3><p class="muted">Review available scoring information and match results.</p></div>
+    <div class="card"><h3>Corner Analysis</h3><p class="muted">Analyse corner statistics when those statistics are available from the data source.</p></div>
+    <div class="card"><h3>Player Research</h3><p class="muted">Explore player information when supported data is available.</p></div>
+    <div class="card"><h3>Risk Assessment</h3><p class="muted">Understand uncertainty. No result is guaranteed.</p></div>
   </div>
 </section>
-
 <section class="container" id="research">
   <h2>Football Match Research</h2>
-  <p class="muted">Enter a match to prepare a research request.</p>
-
+  <p class="muted">Enter the match details. GN-AI will check the football data source first, then send the returned match information for AI analysis.</p>
   <div class="card">
     <form id="matchForm">
-      <div>
-        <label for="competition">Competition or League</label>
-        <input id="competition" placeholder="Example: Premier League" required>
-      </div>
-      <div>
-        <label for="home">Home Team</label>
-        <input id="home" placeholder="Enter home team" required>
-      </div>
-      <div>
-        <label for="away">Away Team</label>
-        <input id="away" placeholder="Enter away team" required>
-      </div>
-      <div>
-        <label for="date">Match Date</label>
-        <input id="date" type="date">
-      </div>
-      <div>
-        <label for="type">Research Type</label>
+      <div><label for="competition">Competition or League</label><input id="competition" placeholder="Example: Premier League" required></div>
+      <div><label for="home">Home Team</label><input id="home" placeholder="Enter home team" required></div>
+      <div><label for="away">Away Team</label><input id="away" placeholder="Enter away team" required></div>
+      <div><label for="date">Match Date</label><input id="date" type="date" required></div>
+      <div><label for="type">Research Type</label>
         <select id="type">
-          <option>Complete Match Research</option>
-          <option>Team Performance</option>
-          <option>Goal Statistics</option>
-          <option>Corner Statistics</option>
-          <option>Player Research</option>
-          <option>Risk Assessment</option>
+          <option>Complete Match Research</option><option>Team Performance</option><option>Goal Statistics</option><option>Corner Statistics</option><option>Player Research</option><option>Risk Assessment</option>
         </select>
       </div>
-      <button type="submit">Prepare Research Request</button>
+      <button id="submitButton" type="submit">Run Match Research</button>
     </form>
-
-    <div id="result" aria-live="polite"></div>
+    <div id="result" role="status" aria-live="polite"></div>
   </div>
 </section>
-
 <section class="container">
   <h2>Our Intelligence Standards</h2>
-  <div class="notice">
-    GN-AI does not invent statistics, claim guaranteed results
-    or promise betting wins. Reliable live data and AI analysis
-    must be connected before real match intelligence can be provided.
-  </div>
+  <div class="notice">GN-AI uses the information returned by its connected data source. If a statistic is not available, the analysis must say so. GN-AI does not invent statistics, guarantee outcomes or promise betting wins.</div>
 </section>
-
 <footer>
   <p><strong>GN-AI Football Intelligence</strong></p>
   <p>Developed by Garba Numbeya</p>
   <p>Building intelligent solutions for the world.</p>
   <p>© 2026 GN-AI. All rights reserved.</p>
 </footer>
-
 <script>
-document.getElementById("matchForm").addEventListener("submit", function(event) {
-  event.preventDefault();
+const form = document.getElementById("matchForm");
+const resultBox = document.getElementById("result");
+const submitButton = document.getElementById("submitButton");
 
+function showMessage(title, message, isError = false) {
+  resultBox.className = isError ? "error" : "";
+  resultBox.style.display = "block";
+  resultBox.replaceChildren();
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  const paragraph = document.createElement("p");
+  paragraph.textContent = message;
+  resultBox.append(heading, paragraph);
+}
+
+function teamMatches(apiName, requestedName) {
+  const a = String(apiName || "").trim().toLowerCase();
+  const b = String(requestedName || "").trim().toLowerCase();
+  return a === b || (a.length > 2 && b.length > 2 && (a.includes(b) || b.includes(a)));
+}
+
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();
   const competition = document.getElementById("competition").value.trim();
   const home = document.getElementById("home").value.trim();
   const away = document.getElementById("away").value.trim();
-  const date = document.getElementById("date").value || "Not specified";
-  const type = document.getElementById("type").value;
-  const result = document.getElementById("result");
+  const date = document.getElementById("date").value;
+  const researchType = document.getElementById("type").value;
 
   if (!home || !away || home.toLowerCase() === away.toLowerCase()) {
-    result.style.display = "block";
-    result.textContent = "Please enter two different team names.";
+    showMessage("Check the team names", "Enter two different teams.", true);
+    return;
+  }
+  if (!date) {
+    showMessage("Match date required", "Choose the match date so GN-AI can request the correct fixtures.", true);
     return;
   }
 
-  result.style.display = "block";
-  result.innerHTML = `
-    <h3>Research Request Prepared</h3>
-    <p><strong>Competition:</strong> ${escapeHTML(competition)}</p>
-    <p><strong>Home Team:</strong> ${escapeHTML(home)}</p>
-    <p><strong>Away Team:</strong> ${escapeHTML(away)}</p>
-    <p><strong>Date:</strong> ${escapeHTML(date)}</p>
-    <p><strong>Research:</strong> ${escapeHTML(type)}</p>
-    <p>This request is prepared. Live statistics and AI analysis
-    are not connected yet.</p>
-  `;
-});
+  submitButton.disabled = true;
+  submitButton.textContent = "Checking football data...";
+  showMessage("Step 1 of 2: Checking football data", "Connecting to the GN-AI football data endpoint. Please wait.");
 
-function escapeHTML(value) {
-  return value.replace(/[&<>"']/g, function(char) {
-    return {
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    }[char];
-  });
-}
+  try {
+    const footballResponse = await fetch("/api/football?resource=fixtures&date=" + encodeURIComponent(date));
+    const footballResult = await footballResponse.json();
+
+    if (!footballResponse.ok || footballResult.success !== true) {
+      const detail = footballResult.error || footballResult.data?.errors?.[0] || "The football data service returned an error.";
+      throw new Error(String(detail));
+    }
+
+    const fixtures = Array.isArray(footballResult.data?.response) ? footballResult.data.response : [];
+    const matchingFixtures = fixtures.filter(item => {
+      const teams = item.teams || {};
+      const leagueName = item.league?.name || "";
+      const correctTeams = teamMatches(teams.home?.name, home) && teamMatches(teams.away?.name, away);
+      const correctLeague = !competition || teamMatches(leagueName, competition);
+      return correctTeams && correctLeague;
+    });
+
+    if (matchingFixtures.length === 0) {
+      showMessage("No exact fixture found", "The data service returned " + fixtures.length + " fixture(s) for " + date + ", but none matched " + home + " vs " + away + (competition ? " in " + competition : "") + ". Check the team names, league and date. GN-AI has not invented a match or analysis.", true);
+      return;
+    }
+
+    submitButton.textContent = "Step 2 of 2: AI analysis...";
+    showMessage("Step 2 of 2: AI analysis", "A matching fixture was found. Sending the real returned fixture information to GN-AI for analysis.");
+
+    const analysisPrompt = [
+      "You are GN-AI, a careful football research assistant.",
+      "Analyse only the actual match data supplied below.",
+      "Clearly separate confirmed facts from cautious interpretation.",
+      "Do not invent form, injuries, lineups, odds, head-to-head records, goals or corner statistics if they are not included.",
+      "If the supplied data is insufficient for a requested conclusion, say exactly what is missing.",
+      "Do not guarantee outcomes or present guesses as facts. Use clear headings and simple language.",
+      "Requested research: " + researchType,
+      "User's competition: " + competition,
+      "Requested match: " + home + " vs " + away,
+      "Requested date: " + date,
+      "Verified fixture data from the connected football provider:",
+      JSON.stringify(matchingFixtures)
+    ].join("\n\n");
+
+    const aiResponse = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: analysisPrompt })
+    });
+    const aiResult = await aiResponse.json();
+
+    if (!aiResponse.ok || aiResult.success !== true || !aiResult.answer) {
+      throw new Error(aiResult.error || "The AI analysis service returned an error.");
+    }
+
+    resultBox.className = "";
+    resultBox.style.display = "block";
+    resultBox.replaceChildren();
+    const heading = document.createElement("h3");
+    heading.textContent = "GN-AI Match Research";
+    const matchLine = document.createElement("p");
+    const fixture = matchingFixtures[0];
+    matchLine.textContent = (fixture.teams?.home?.name || home) + " vs " + (fixture.teams?.away?.name || away) + " | " + (fixture.league?.name || competition) + " | " + date;
+    const analysis = document.createElement("p");
+    analysis.style.whiteSpace = "pre-wrap";
+    analysis.textContent = aiResult.answer;
+    const source = document.createElement("p");
+    source.className = "muted";
+    source.textContent = "Source: connected Football API data and GN-AI analysis. Only the returned fixture data was verified in this request.";
+    resultBox.append(heading, matchLine, analysis, source);
+  } catch (error) {
+    showMessage("Research could not be completed", error.message || "A connection error occurred. Please try again.", true);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Run Match Research";
+  }
+});
 </script>
 </body>
 </html>
-
