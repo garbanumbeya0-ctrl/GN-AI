@@ -15,7 +15,6 @@ export default {
 
     const url = new URL(request.url);
 
-    // Basic service health check
     if (url.pathname === "/api/health") {
       if (request.method !== "GET") {
         return respond({ success: false, error: "Method not allowed" }, 405);
@@ -23,23 +22,27 @@ export default {
 
       return respond({
         success: true,
-        engine: "GN-AI Global",
+        engine: "GN-AI Worldwide",
         status: "online",
-        version: "1.1",
+        version: "1.2",
+        providers: {
+          ai: env.GEMINI_API_KEY ? "configured" : "missing",
+          football: env.FOOTBALL_API_KEY ? "configured" : "missing",
+          database: env.DB ? "configured" : "not_configured",
+        },
       });
     }
 
-    // AI chat endpoint
     if (url.pathname === "/api/chat") {
       if (request.method !== "POST") {
         return respond({ success: false, error: "Method not allowed" }, 405);
       }
 
-      if (!env.OPENAI_API_KEY) {
+      if (!env.GEMINI_API_KEY) {
         return respond({
           success: false,
-          error: "AI API key not configured",
-          code: "MISSING_OPENAI_API_KEY",
+          error: "Gemini API key is not configured in this Worker.",
+          code: "MISSING_GEMINI_API_KEY",
         }, 503);
       }
 
@@ -53,41 +56,54 @@ export default {
           }, 400);
         }
 
-        const ai = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              {
-                role: "system",
-                content: "You are GN-AI, a helpful global AI assistant.",
+        const ai = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+          {
+            method: "POST",
+            headers: {
+              "x-goog-api-key": env.GEMINI_API_KEY,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              systemInstruction: {
+                parts: [{
+                  text: "You are GN-AI, a helpful, accurate global AI assistant. Be clear about uncertainty and never invent facts."
+                }]
               },
-              { role: "user", content: body.message.trim() },
-            ],
-          }),
-        });
+              contents: [{
+                role: "user",
+                parts: [{ text: body.message.trim() }]
+              }],
+              generationConfig: {
+                temperature: 0.4,
+                maxOutputTokens: 2048
+              }
+            })
+          }
+        );
 
         const result = await ai.json().catch(() => null);
 
         if (!ai.ok) {
           return respond({
             success: false,
-            error: result?.error?.message || "AI provider rejected the request",
-            code: "OPENAI_PROVIDER_ERROR",
+            error: result?.error?.message || "Gemini rejected the request.",
+            code: "GEMINI_PROVIDER_ERROR",
             provider_status: ai.status,
-          }, ai.status);
+          }, ai.status >= 400 && ai.status < 600 ? ai.status : 502);
         }
 
-        const answer = result?.choices?.[0]?.message?.content;
-        if (typeof answer !== "string" || !answer.trim()) {
+        const answer = result?.candidates?.[0]?.content?.parts
+          ?.map(part => part.text || "")
+          .join("")
+          .trim();
+
+        if (!answer) {
           return respond({
             success: false,
-            error: "AI provider returned no answer",
-            code: "EMPTY_AI_RESPONSE",
+            error: "Gemini returned no text. The response may have been blocked or empty.",
+            code: "EMPTY_GEMINI_RESPONSE",
+            finish_reason: result?.candidates?.[0]?.finishReason || null,
           }, 502);
         }
 
@@ -96,13 +112,12 @@ export default {
         const invalidJson = error instanceof SyntaxError;
         return respond({
           success: false,
-          error: invalidJson ? "Request body must be valid JSON" : "AI request failed",
-          code: invalidJson ? "INVALID_REQUEST_JSON" : "AI_REQUEST_FAILED",
-        }, invalidJson ? 400 : 500);
+          error: invalidJson ? "Request body must be valid JSON" : "Gemini request failed.",
+          code: invalidJson ? "INVALID_REQUEST_JSON" : "GEMINI_REQUEST_FAILED",
+        }, invalidJson ? 400 : 502);
       }
     }
 
-    // Live football data endpoint
     if (url.pathname === "/api/football") {
       if (request.method !== "GET") {
         return respond({ success: false, error: "Method not allowed" }, 405);
@@ -111,7 +126,7 @@ export default {
       if (!env.FOOTBALL_API_KEY) {
         return respond({
           success: false,
-          error: "Football API key not configured",
+          error: "Football API key is not configured in this Worker.",
           code: "MISSING_FOOTBALL_API_KEY",
         }, 503);
       }
@@ -169,7 +184,6 @@ export default {
             code: "FOOTBALL_PROVIDER_ERROR",
             provider_status: football.status,
             provider_errors: providerErrors || null,
-            data,
           }, football.ok ? 502 : football.status);
         }
 
@@ -188,7 +202,7 @@ export default {
     }
 
     return respond({
-      engine: "GN-AI Global",
+      engine: "GN-AI Worldwide",
       message: "Welcome to GN-AI",
       endpoints: ["/api/health", "/api/chat", "/api/football"],
     });
