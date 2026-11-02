@@ -93,6 +93,9 @@ const form = document.getElementById("matchForm");
 const resultBox = document.getElementById("result");
 const submitButton = document.getElementById("submitButton");
 
+// Send API requests directly to the GN-AI Worldwide Worker, not to the Pages website.
+const API_BASE = "https://gn-ai-worldwide.garbanumbeya0-740.workers.dev";
+
 function showMessage(title, message, isError = false) {
   resultBox.className = isError ? "error" : "";
   resultBox.style.display = "block";
@@ -132,7 +135,7 @@ form.addEventListener("submit", async function(event) {
   showMessage("Step 1 of 2: Checking football data", "Connecting to the GN-AI football data endpoint. Please wait.");
 
   try {
-    const footballResponse = await fetch("/api/football?resource=fixtures&date=" + encodeURIComponent(date));
+    const footballResponse = await fetch(API_BASE + "/api/football?resource=fixtures&date=" + encodeURIComponent(date));
     const footballResult = await footballResponse.json();
 
     if (!footballResponse.ok || footballResult.success !== true) {
@@ -172,7 +175,7 @@ form.addEventListener("submit", async function(event) {
       JSON.stringify(matchingFixtures)
     ].join("\n\n");
 
-    const aiResponse = await fetch("/api/chat", {
+    const aiResponse = await fetch(API_BASE + "/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: analysisPrompt })
